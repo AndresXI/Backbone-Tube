@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import '../src/components/styles/main.css';
-
 import { onUpdate, forceUpdate, sendEvent } from './state';
 import SearchBar from './components/search_bar';
 import VideoDetail from './components/video_detail';
@@ -14,9 +14,6 @@ const axios = require('axios');
 const API_KEY = 'AIzaSyBQtEiqAheuxGrVsf0JJMPLSMzCUtVAJ1k';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   videoSearch = (term) => {
     const url = 'https://www.googleapis.com/youtube/v3/search';
@@ -49,6 +46,11 @@ class App extends Component {
       </div>
     );
   }
+}
+
+App.propTypes = {
+  videoList: PropTypes.array.isRequired,
+  selected: PropTypes.object
 }
 
 const root = document.querySelector('#root');

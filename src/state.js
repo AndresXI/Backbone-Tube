@@ -75,8 +75,6 @@ export {
   // useful mostly on the very first render of the application, which otherwise
   // would have no way to get the state if it's unable to change its values!
   forceUpdate,
-
   onUpdate,
-
   sendEvent
 };
