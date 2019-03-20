@@ -4,6 +4,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import '../src/components/styles/main.css';
 
+import { onUpdate, forceUpdate, sendEvent } from './state';
 import SearchBar from './components/search_bar';
 import VideoDetail from './components/video_detail';
 import VideoList from './components/video_list';
@@ -15,11 +16,6 @@ const API_KEY = 'AIzaSyBQtEiqAheuxGrVsf0JJMPLSMzCUtVAJ1k';
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      videos: [],
-      selectedVideo: null
-    };
   }
 
   videoSearch = (term) => {
@@ -36,11 +32,8 @@ class App extends Component {
       .get(url, { params: params })
       .then(response => {
         console.log(response);
-        this.setState({
-          videos: response.data.items,
-          selectedVideo: response.data.items[0]
-        });
-
+        // call add event and set data,
+        sendEvent('setVideos', response.data.items);
       })
       .catch(error => {
         console.error('there was an error: ', error);
@@ -51,11 +44,21 @@ class App extends Component {
     return (
       <div>
         <SearchBar onSearchTermChange={this.videoSearch} />
-        <VideoDetail video={this.state.selectedVideo} />
-        <VideoList videoList={this.state.videos} />
+        <VideoDetail video={this.props.selected} />
+        <VideoList videoList={this.props.videoList} />
       </div>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const root = document.querySelector('#root');
+
+onUpdate((state) => {
+  ReactDOM.render(
+    <App videoList={state.videos} selected={state.selectedVideo} />,
+    root
+  );
+});
+
+forceUpdate();
+
